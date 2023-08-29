@@ -11,10 +11,12 @@ import React, { useState } from 'react';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { MaterialIcons } from '@expo/vector-icons';
 import { AntDesign } from '@expo/vector-icons';
+import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 
 const RegisterScreen = () => {
   const [email, setEmail] = useState('');
+  const [name, setName] = useState('');
   const [password, setPassword] = useState('');
 
   const navigation = useNavigation();
@@ -57,27 +59,24 @@ const RegisterScreen = () => {
               marginTop: 30,
             }}
           >
-            <MaterialIcons
-              name="email"
+            <Ionicons
+              name="ios-person"
               size={24}
               color="gray"
               style={{ marginLeft: 8 }}
             />
             <TextInput
-              value={email}
-              onChangeText={(text) => setEmail(text)}
+              value={name}
+              onChangeText={(text) => setName(text)}
               style={{
                 color: 'gray',
                 marginVertical: 10,
                 width: 300,
-                fontSize: email ? 16 : 16,
+                fontSize: name ? 16 : 16,
               }}
-              placeholder="enter your Email"
+              placeholder="enter your Name"
             />
           </View>
-        </View>
-
-        <View style={{ marginTop: 10 }}>
           <View
             style={{
               flexDirection: 'row',
@@ -96,18 +95,48 @@ const RegisterScreen = () => {
               style={{ marginLeft: 8 }}
             />
             <TextInput
-              value={password}
-              onChangeText={(text) => setPassword(text)}
-              secureTextEntry={true}
+              value={email}
+              onChangeText={(text) => setEmail(text)}
               style={{
                 color: 'gray',
                 marginVertical: 10,
                 width: 300,
-                fontSize: password ? 16 : 16,
+                fontSize: email ? 16 : 16,
               }}
-              placeholder="enter your Password"
+              placeholder="enter your Email"
             />
           </View>
+        </View>
+
+        <View
+          style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            gap: 5,
+            backgroundColor: '#D0D0D0',
+            paddingVertical: 5,
+            borderRadius: 5,
+            marginTop: 30,
+          }}
+        >
+          <MaterialIcons
+            name="email"
+            size={24}
+            color="gray"
+            style={{ marginLeft: 8 }}
+          />
+          <TextInput
+            value={password}
+            secureTextEntry={true}
+            onChangeText={(text) => setPassword(text)}
+            style={{
+              color: 'gray',
+              marginVertical: 10,
+              width: 300,
+              fontSize: password ? 16 : 16,
+            }}
+            placeholder="enter your Password"
+          />
         </View>
 
         <View
@@ -150,10 +179,10 @@ const RegisterScreen = () => {
 
         <Pressable
           style={{ marginTop: 15 }}
-          onPress={() => navigation.navigate('Register')}
+          onPress={() => navigation.goBack()}
         >
           <Text style={{ textAlign: 'center', color: 'gray', fontSize: 16 }}>
-            Don't have an account? Sign Up
+            Already have an account? Sign In
           </Text>
         </Pressable>
       </KeyboardAvoidingView>
