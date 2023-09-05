@@ -1,4 +1,5 @@
 import {
+  Alert,
   Image,
   KeyboardAvoidingView,
   Pressable,
@@ -13,6 +14,7 @@ import { MaterialIcons } from '@expo/vector-icons';
 import { AntDesign } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
+import axios from 'axios';
 
 const RegisterScreen = () => {
   const [email, setEmail] = useState('');
@@ -21,7 +23,37 @@ const RegisterScreen = () => {
 
   const navigation = useNavigation();
 
-  const handleRegister = () => {};
+  const handleRegister = () => {
+    const user = {
+      name: name,
+      email: email,
+      password: password,
+    };
+
+    // send a post request to the backend API
+    axios
+      .post('http://192.168.86.244:8000/register', user)
+      .then((response) => {
+        console.log(response);
+        Alert.alert(
+          'Registration Successfull',
+          'You have registered successfully'
+        );
+        setName('');
+        setEmail('');
+        setPassword('');
+      })
+      .catch((error) => {
+        Alert.alert(
+          'Registration Error',
+          'An error occured during registration'
+        );
+        setName('');
+        setEmail('');
+        setPassword('');
+        console.log('registration failed', error);
+      });
+  };
 
   return (
     <SafeAreaView
