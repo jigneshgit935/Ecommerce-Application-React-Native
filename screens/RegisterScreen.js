@@ -20,6 +20,9 @@ const RegisterScreen = () => {
   const [password, setPassword] = useState('');
 
   const navigation = useNavigation();
+
+  const handleRegister = () => {};
+
   return (
     <SafeAreaView
       style={{ flex: 1, backgroundColor: '#fff', alignItems: 'center' }}
@@ -156,6 +159,7 @@ const RegisterScreen = () => {
         <View style={{ marginTop: 50 }} />
 
         <Pressable
+          onPress={handleRegister}
           style={{
             width: 200,
             backgroundColor: '#FEBE10',
@@ -173,7 +177,7 @@ const RegisterScreen = () => {
               fontWeight: 'bold',
             }}
           >
-            Login
+            Register
           </Text>
         </Pressable>
 

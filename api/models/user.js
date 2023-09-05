@@ -37,7 +37,6 @@ const userSchema = new mongoose.Schema({
       ref: 'Order',
     },
   ],
-
   createdAt: {
     type: Date,
     default: Date.now,
@@ -45,4 +44,5 @@ const userSchema = new mongoose.Schema({
 });
 
 const User = mongoose.model('User', userSchema);
+
 module.exports = User;

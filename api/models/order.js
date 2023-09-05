@@ -4,7 +4,7 @@ const orderSchema = new mongoose.Schema({
   user: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
-    required: true,
+    require: true,
   },
   products: [
     {
@@ -30,7 +30,6 @@ const orderSchema = new mongoose.Schema({
     type: Number,
     required: true,
   },
-
   shippingAddress: {
     name: {
       type: String,
@@ -68,4 +67,5 @@ const orderSchema = new mongoose.Schema({
 });
 
 const Order = mongoose.model('Order', orderSchema);
+
 module.exports = Order;
