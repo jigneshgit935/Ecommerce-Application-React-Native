@@ -30,7 +30,7 @@ const LoginScreen = () => {
     };
 
     axios
-      .post('http://192.168.86.244:8000/login', user)
+      .post(`http://${process.env.SECRET_HOST}:8000/login`, user)
       .then((response) => {
         console.log(response);
         const token = response.data.token;
