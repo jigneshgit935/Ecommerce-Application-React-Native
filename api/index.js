@@ -156,3 +156,5 @@ app.post('/login', async (req, res) => {
     res.status(500).json({ message: 'Login Failed' });
   }
 });
+
+// endpoint to store a new address into the backend
