@@ -16,12 +16,27 @@ import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import axios from 'axios';
+import { useEffect } from 'react';
 
 const LoginScreen = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
   const navigation = useNavigation();
+
+  useEffect(() => {
+    const checkLoginStatus = async () => {
+      try {
+        const token = await AsyncStorage.getItem('authToken');
+        if (token) {
+          navigation.replace('Main');
+        }
+      } catch (err) {
+        console.log('error message', err);
+      }
+    };
+    checkLoginStatus();
+  }, []);
 
   const handleLogin = () => {
     const user = {
@@ -30,7 +45,7 @@ const LoginScreen = () => {
     };
 
     axios
-      .post(`http://localhost:8000/login`, user)
+      .post(`http://${api_url}:8000/login`, user)
       .then((response) => {
         console.log(response);
         const token = response.data.token;
