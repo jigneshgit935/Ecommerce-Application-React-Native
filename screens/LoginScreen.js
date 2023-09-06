@@ -30,12 +30,12 @@ const LoginScreen = () => {
     };
 
     axios
-      .post(`http://${process.env.SECRET_HOST}:8000/login`, user)
+      .post(`http://localhost:8000/login`, user)
       .then((response) => {
         console.log(response);
         const token = response.data.token;
         AsyncStorage.setItem('authToken', token);
-        navigation.replace('Home');
+        navigation.replace('Main');
       })
       .catch((error) => {
         Alert.alert('Login Error', 'Invalid Email or Password');
