@@ -1,4 +1,5 @@
 import {
+  Alert,
   Pressable,
   ScrollView,
   StyleSheet,
@@ -6,8 +7,12 @@ import {
   TextInput,
   View,
 } from 'react-native';
-import React, { useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import jwt_decode from 'jwt-decode';
+import { UserType } from '../UserContext';
+import axios from 'axios';
 
 const AddressScreen = () => {
   const navigation = useNavigation();
@@ -17,6 +22,48 @@ const AddressScreen = () => {
   const [street, setStreet] = useState('');
   const [landmark, setLandmark] = useState('');
   const [postalCode, setPostalCode] = useState('');
+
+  const { userId, setUserId } = useContext(UserType);
+  useEffect(() => {
+    const fetchUser = async () => {
+      const token = await AsyncStorage.getItem('authToken');
+      const decodedToken = jwt_decode(token);
+      const userId = decodedToken.userId;
+      setUserId(userId);
+    };
+    fetchUser();
+  }, []);
+
+  const handleAddAddress = () => {
+    const address = {
+      name,
+      mobileNo,
+      houseNo,
+      street,
+      landmark,
+      postalCode,
+    };
+
+    axios
+      .post('http://{api_url}:8000/addresses', { userId, address })
+      .then((response) => {
+        Alert.alert('Success', 'Address added successfully');
+        setName('');
+        setMobileNo('');
+        setHouseNo('');
+        setStreet('');
+        setLandmark('');
+        setPostalCode('');
+
+        setTimeout(() => {
+          navigation.goBack();
+        }, 500);
+      })
+      .catch((error) => {
+        Alert.alert('Error', 'Failed to add address');
+        console.log('Error', error);
+      });
+  };
   return (
     <ScrollView style={{ marginTop: 50 }}>
       <View style={{ height: 50, backgroundColor: '#00CDE1' }} />
@@ -148,6 +195,7 @@ const AddressScreen = () => {
         </View>
 
         <Pressable
+          onPress={handleAddAddress}
           style={{
             backgroundColor: '#FFC72C',
             padding: 10,
