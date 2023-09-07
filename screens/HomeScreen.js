@@ -15,13 +15,16 @@ import { Ionicons } from '@expo/vector-icons';
 import { Entypo } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons';
 import { SliderBox } from 'react-native-image-slider-box';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useContext, useEffect, useState } from 'react';
 import axios from 'axios';
 import ProductItem from '../components/ProductItem';
 import DropDownPicker from 'react-native-dropdown-picker';
 import { useNavigation } from '@react-navigation/native';
 import { useSelector } from 'react-redux';
 import { BottomModal, ModalContent, SlideAnimation } from 'react-native-modals';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { UserType } from '../UserContext';
+import jwt_decode from 'jwt-decode';
 
 const HomeScreen = () => {
   const list = [
@@ -200,10 +203,12 @@ const HomeScreen = () => {
   const [products, setProducts] = useState([]);
 
   const navigation = useNavigation();
-
+  const [addresses, setAddresses] = useState([]);
+  const [selectedAddress, setSelectedAddress] = useState('');
   const [open, setOpen] = useState(false);
   const [category, setCategory] = useState('jewelery');
 
+  console.log(selectedAddress);
   const [items, setItems] = useState([
     { label: "Men's clothing", value: "men's clothing" },
     { label: 'jewelery', value: 'jewelery' },
@@ -229,6 +234,35 @@ const HomeScreen = () => {
 
   const cart = useSelector((state) => state.cart.cart);
   const [modalVisible, setModalVisible] = useState(false);
+  const { userId, setUserId } = useContext(UserType);
+
+  useEffect(() => {
+    if (userId) {
+      fetchAddresses();
+    }
+  }, [userId, modalVisible]);
+
+  const fetchAddresses = async () => {
+    try {
+      const response = await axios.get(
+        `http://192.168.125.244:8000/addresses/${userId}`
+      );
+      const { addresses } = response.data;
+      setAddresses(addresses);
+    } catch (error) {
+      console.log('Error', error);
+    }
+  };
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      const token = await AsyncStorage.getItem('authToken');
+      const decodedToken = jwt_decode(token);
+      const userId = decodedToken.userId;
+      setUserId(userId);
+    };
+    fetchUser();
+  }, []);
   return (
     <>
       <SafeAreaView
@@ -281,9 +315,15 @@ const HomeScreen = () => {
           >
             <Ionicons name="location-outline" size={24} color="black" />
             <Pressable>
-              <Text style={{ fontSize: 13, fontWeight: '500' }}>
-                Deliver to Jignesh - Udaipur 3001202
-              </Text>
+              {selectedAddress ? (
+                <Text>
+                  Deliver to {selectedAddress?.name} - {selectedAddress?.street}
+                </Text>
+              ) : (
+                <Text style={{ fontSize: 13, fontWeight: '500' }}>
+                  Add a Address{' '}
+                </Text>
+              )}
             </Pressable>
             <MaterialIcons name="keyboard-arrow-down" size={24} color="black" />
           </Pressable>
@@ -508,6 +548,57 @@ const HomeScreen = () => {
 
           <ScrollView horizontal showsHorizontalScrollIndicator={false}>
             {/* already added addresses */}
+
+            {addresses?.map((item, index) => (
+              <Pressable
+                onPress={() => setSelectedAddress(item)}
+                key={index}
+                style={{
+                  width: 140,
+                  height: 140,
+                  borderColor: '#D0D0D0',
+                  borderWidth: 1,
+                  padding: 10,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  gap: 3,
+                  marginRight: 15,
+                  marginTop: 10,
+                  backgroundColor:
+                    selectedAddress === item ? '#FBCEB1' : 'white',
+                }}
+              >
+                <View
+                  style={{ flexDirection: 'row', alignItems: 'center', gap: 3 }}
+                >
+                  <Text style={{ fontSize: 13, fontWeight: 'bold' }}>
+                    {item?.name}
+                  </Text>
+                  <Entypo name="location-pin" size={24} color="red" />
+                </View>
+
+                <Text
+                  style={{ width: 130, fontSize: 13, textAlign: 'center' }}
+                  numberOfLines={1}
+                >
+                  {item?.houseNo}, {item?.landmark}
+                </Text>
+
+                <Text
+                  style={{ width: 130, fontSize: 13, textAlign: 'center' }}
+                  numberOfLines={1}
+                >
+                  {item?.street}
+                </Text>
+
+                <Text
+                  style={{ width: 130, fontSize: 13, textAlign: 'center' }}
+                  numberOfLines={1}
+                >
+                  India, Rajasthan
+                </Text>
+              </Pressable>
+            ))}
             <Pressable
               onPress={() => {
                 setModalVisible(false);

@@ -181,7 +181,7 @@ app.post('/addresses', async (req, res) => {
 });
 
 //endpoint to get all the addresses of a particular user
-app.get('/addresses/:userId', async () => {
+app.get('/addresses/:userId', async (req, res) => {
   try {
     const userId = req.params.userId;
 
