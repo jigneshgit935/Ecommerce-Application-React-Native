@@ -1,10 +1,10 @@
 import { StyleSheet, Text, View } from 'react-native';
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { ScrollView } from 'react-native';
 import { TextInput } from 'react-native';
 import { AntDesign, Feather, MaterialIcons, Entypo } from '@expo/vector-icons';
 import { Pressable } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import axios from 'axios';
 import { UserType } from '../UserContext';
 
@@ -21,7 +21,7 @@ const AddAddressScreen = () => {
   const fetchAddresses = async () => {
     try {
       const response = await axios.get(
-        `http://192.168.125.244:8000/addresses/${userId}`
+        `http://{api_url}:8000/addresses/${userId}`
       );
       const { addresses } = response.data;
       setAddresses(addresses);
@@ -30,7 +30,12 @@ const AddAddressScreen = () => {
     }
   };
 
-  console.log('addresses', addresses);
+  //   refress the addressess when the component come into focus
+  useFocusEffect(
+    useCallback(() => {
+      fetchAddresses();
+    })
+  );
   return (
     <ScrollView showsVerticalScrollIndicator={false} style={{ marginTop: 50 }}>
       <View
@@ -123,7 +128,9 @@ const AddAddressScreen = () => {
               <Text style={{ fontSize: 15, color: '#181818' }}>
                 Phone No : {item.mobileNo}
               </Text>
-              <Text>Pincode : {item.postalCode}</Text>
+              <Text style={{ fontSize: 15, color: '#181818' }} t>
+                Pin code : {item.postalCode}
+              </Text>
 
               <View
                 style={{

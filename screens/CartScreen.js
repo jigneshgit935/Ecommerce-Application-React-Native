@@ -9,8 +9,16 @@ import {
 } from 'react-native';
 import React from 'react';
 import { AntDesign, Feather } from '@expo/vector-icons';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  decrementQuantity,
+  incrementQuantity,
+  removeFromCart,
+} from '../redux/CartReducer';
+import { useNavigation } from '@react-navigation/native';
 const CartScreen = () => {
+  const navigation = useNavigation();
+
   const cart = useSelector((state) => state.cart.cart);
 
   console.log(cart);
@@ -19,6 +27,18 @@ const CartScreen = () => {
     .reduce((curr, prev) => curr + prev, 0);
   console.log(total);
 
+  const dispatch = useDispatch();
+  const increaseQuantity = (item) => {
+    dispatch(incrementQuantity(item));
+  };
+
+  const decreaseQuantity = (item) => {
+    dispatch(decrementQuantity(item));
+  };
+
+  const deleteItem = (item) => {
+    dispatch(removeFromCart(item));
+  };
   return (
     <ScrollView style={{ marginTop: 55, flex: 1, backgroundColor: 'white' }}>
       <View
@@ -60,6 +80,7 @@ const CartScreen = () => {
       <Text style={{ marginHorizontal: 10 }}>EMI details Available</Text>
 
       <Pressable
+        onPress={() => navigation.navigate('Confirm')}
         style={{
           backgroundColor: '#FFC72C',
           padding: 10,
@@ -148,16 +169,32 @@ const CartScreen = () => {
                   borderRadius: 7,
                 }}
               >
-                <Pressable
-                  style={{
-                    backgroundColor: '#D8D8D8',
-                    padding: 7,
-                    borderTopLeftRadius: 6,
-                    borderBottomLeftRadius: 6,
-                  }}
-                >
-                  <AntDesign name="delete" size={24} color="black" />
-                </Pressable>
+                {item?.quantity > 1 ? (
+                  <Pressable
+                    onPress={() => decreaseQuantity(item)}
+                    style={{
+                      backgroundColor: '#D8D8D8',
+                      padding: 7,
+                      borderTopLeftRadius: 6,
+                      borderBottomLeftRadius: 6,
+                    }}
+                  >
+                    <AntDesign name="minus" size={24} color="black" />
+                  </Pressable>
+                ) : (
+                  <Pressable
+                    onPress={() => deleteItem(item)}
+                    style={{
+                      backgroundColor: '#D8D8D8',
+                      padding: 7,
+                      borderTopLeftRadius: 6,
+                      borderBottomLeftRadius: 6,
+                    }}
+                  >
+                    <AntDesign name="delete" size={24} color="black" />
+                  </Pressable>
+                )}
+
                 <Pressable>
                   <Text
                     style={{
@@ -170,6 +207,7 @@ const CartScreen = () => {
                   </Text>
                 </Pressable>
                 <Pressable
+                  onPress={() => increaseQuantity(item)}
                   style={{
                     backgroundColor: '#D8D8D8',
                     padding: 7,
@@ -181,6 +219,7 @@ const CartScreen = () => {
                 </Pressable>
               </View>
               <Pressable
+                onPress={() => deleteItem(item)}
                 style={{
                   backgroundColor: 'white',
                   paddingHorizontal: 8,
