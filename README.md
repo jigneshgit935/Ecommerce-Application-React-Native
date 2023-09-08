@@ -33,6 +33,14 @@ https://github.com/jigneshgit935/Ecommerce-Application-React-Native/assets/10290
 
 https://github.com/jigneshgit935/Ecommerce-Application-React-Native/assets/102901231/0dc4c19a-b044-46c8-8344-a7db71fbb06a
 
+8.Profile Screen and Logout functionality (Your Orders)
+
+https://github.com/jigneshgit935/Ecommerce-Application-React-Native/assets/102901231/ce18560d-bfeb-4773-8ab7-c7924778885d
+
+
+
+
+
 
 
 
