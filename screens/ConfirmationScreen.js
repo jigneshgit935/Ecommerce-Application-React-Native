@@ -3,7 +3,10 @@ import React, { useContext, useEffect, useState } from 'react';
 import axios from 'axios';
 import { UserType } from '../UserContext';
 import { Entypo, FontAwesome5, MaterialIcons } from '@expo/vector-icons';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigation } from '@react-navigation/native';
+import { cleanCart } from '../redux/CartReducer';
+import { Alert } from 'react-native';
 
 const ConfirmationScreen = () => {
   const steps = [
@@ -12,7 +15,7 @@ const ConfirmationScreen = () => {
     { title: 'Payment', content: 'Payment Details' },
     { title: 'Place Order', content: 'Order Summary' },
   ];
-
+  const navigation = useNavigation();
   const [currentStep, setCurrentStep] = useState(0);
   const [addresses, setAddresses] = useState([]);
   const { userId, setUserId } = useContext(UserType);
@@ -30,7 +33,7 @@ const ConfirmationScreen = () => {
   const fetchAddresses = async () => {
     try {
       const response = await axios.get(
-        `http://{api_url}:8000/addresses/${userId}`
+        `http://localhost:8000/addresses/${userId}`
       );
       const { addresses } = response.data;
       setAddresses(addresses);
@@ -38,9 +41,46 @@ const ConfirmationScreen = () => {
       console.log('Error', error);
     }
   };
+
+  const dispatch = useDispatch();
   const [selectedAddress, setSelectedAddress] = useState('');
   const [options, setOptions] = useState(false);
   const [selectedOptions, setSelectedOptions] = useState('');
+
+  const handlePlaceOrder = async () => {
+    try {
+      const orderData = {
+        userId: userId,
+        cartItems: cart,
+        totalPrice: total,
+        shippingAddress: selectedAddress,
+        paymentMethod: selectedOptions,
+      };
+
+      const response = await axios.post(
+        'http://localhost:8000/orders',
+        orderData
+      );
+
+      if (response.status === 200) {
+        navigation.navigate('Order');
+        dispatch(cleanCart());
+        console.log('order created successfully', response.data.order);
+      } else {
+        console.log('Error creating order', response.data.order);
+      }
+    } catch (error) {
+      console.log('Error', error);
+    }
+  };
+
+  const pay = async () => {
+    try {
+    } catch (error) {
+      console.log('Error', error);
+    }
+  };
+
   return (
     <ScrollView style={{ marginTop: 55 }}>
       <View style={{ flex: 1, paddingHorizontal: 20, paddingTop: 40 }}>
@@ -339,7 +379,19 @@ const ConfirmationScreen = () => {
               <FontAwesome5 name="dot-circle" size={20} color="#008397" />
             ) : (
               <Entypo
-                onPress={() => setSelectedOptions('card')}
+                onPress={() => {
+                  setSelectedOptions('card');
+                  Alert.alert('UPI/Debit cart', 'Pay Online', [
+                    {
+                      text: 'Cancel',
+                      onPress: () => console.log('Cancelled is pressed'),
+                    },
+                    {
+                      text: 'Ok',
+                      onPress: () => pay(),
+                    },
+                  ]);
+                }}
                 name="circle"
                 size={20}
                 color="gray"
@@ -470,6 +522,7 @@ const ConfirmationScreen = () => {
             </Text>
           </View>
           <Pressable
+            onPress={handlePlaceOrder}
             style={{
               backgroundColor: '#FFC72C',
               padding: 10,

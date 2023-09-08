@@ -245,7 +245,7 @@ const HomeScreen = () => {
   const fetchAddresses = async () => {
     try {
       const response = await axios.get(
-        `http://{api_url}:8000/addresses/${userId}`
+        `http://localhost:8000/addresses/${userId}`
       );
       const { addresses } = response.data;
       setAddresses(addresses);

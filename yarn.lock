@@ -3444,6 +3444,13 @@ expo-modules-core@1.5.10:
     compare-versions "^3.4.0"
     invariant "^2.2.4"
 
+expo-splash-screen@~0.20.5:
+  version "0.20.5"
+  resolved "https://registry.yarnpkg.com/expo-splash-screen/-/expo-splash-screen-0.20.5.tgz#ebeba3e3977606830f74f506ab2cc25042bb7efd"
+  integrity sha512-nTALYdjHpeEA30rdOWSguxn72ctv8WM8ptuUgpfRgsWyn4i6rwYds/rBXisX69XO5fg+XjHAQqijGx/b28+3tg==
+  dependencies:
+    "@expo/prebuild-config" "6.2.6"
+
 expo-status-bar@~1.6.0:
   version "1.6.0"
   resolved "https://registry.yarnpkg.com/expo-status-bar/-/expo-status-bar-1.6.0.tgz#e79ffdb9a84d2e0ec9a0dc7392d9ab364fefa9cf"
@@ -4623,6 +4630,11 @@ loose-envify@^1.0.0, loose-envify@^1.1.0, loose-envify@^1.4.0:
   integrity sha512-lyuxPGr/Wfhrlem2CL/UcnUc1zcqKAImBDzukY7Y5F/yQiNdko6+fRLevlw1HgMySw7f611UIY408EtxRSoK3Q==
   dependencies:
     js-tokens "^3.0.0 || ^4.0.0"
+
+lottie-react-native@^6.2.0:
+  version "6.2.0"
+  resolved "https://registry.yarnpkg.com/lottie-react-native/-/lottie-react-native-6.2.0.tgz#b63d358ca4b112f23997f5fe8118b6ac4662a7ed"
+  integrity sha512-r0I+BPV2oC50/c5Lr41MmLJigH7TVrh4qu/ssWRj1UPpELxVwJlofbaN4mH91ruVw4LqB2mICbXVqUBVgoP64g==
 
 lru-cache@^5.1.1:
   version "5.1.1"
@@ -5833,6 +5845,11 @@ react-native-modals@^0.22.3:
   dependencies:
     babel-plugin-flow-react-proptypes "^9.1.1"
     prop-types "^15.6.0"
+
+react-native-razorpay@^2.3.0:
+  version "2.3.0"
+  resolved "https://registry.yarnpkg.com/react-native-razorpay/-/react-native-razorpay-2.3.0.tgz#e89f3c635e439bc85e4c7972eb2d67e2c0e0abc3"
+  integrity sha512-xxiZCPuZmiRq5UHDr+D4OoyxEjMu0ujC+RaE+rYo938EK0Vc21dZRUVxMVP1L2WgzA8PYwmD5FWvdHNtWLQC4Q==
 
 react-native-safe-area-context@4.6.3:
   version "4.6.3"
